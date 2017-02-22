@@ -1,0 +1,49 @@
+In file included from ../example/main.cpp:1:0:
+../src/MCGA.h:30:31: error: expected type-specifier before ‘(’ token
+     Aplicator<FnType> operator(int)
+                               ^
+../src/MCGA.h: In instantiation of ‘class MCGA::Stream<__gnu_cxx::__normal_iterator<int*, std::vector<int> > >::Aplicator<main()::<lambda(int)> >’:
+../src/MCGA.h:13:12:   required from ‘class MCGA::Stream<MCGA::Stream<__gnu_cxx::__normal_iterator<int*, std::vector<int> > >::Aplicator<main()::<lambda(int)> > >’
+../example/main.cpp:17:5:   required from here
+../src/MCGA.h:19:14: error: ‘MCGA::Stream<Iterator>::Aplicator<FnType>::m_current’ has incomplete type
+    Aplicator m_current;
+              ^~~~~~~~~
+../src/MCGA.h:17:9: note: definition of ‘class MCGA::Stream<__gnu_cxx::__normal_iterator<int*, std::vector<int> > >::Aplicator<main()::<lambda(int)> >’ is not complete until the closing brace
+   class Aplicator
+         ^~~~~~~~~
+../src/MCGA.h:20:14: error: ‘MCGA::Stream<Iterator>::Aplicator<FnType>::m_end’ has incomplete type
+    Aplicator m_end;
+              ^~~~~
+../src/MCGA.h:17:9: note: definition of ‘class MCGA::Stream<__gnu_cxx::__normal_iterator<int*, std::vector<int> > >::Aplicator<main()::<lambda(int)> >’ is not complete until the closing brace
+   class Aplicator
+         ^~~~~~~~~
+../src/MCGA.h: In instantiation of ‘MCGA::Stream<MCGA::Stream<Iterator>::Aplicator<Fn> > MCGA::Stream<Iterator>::map(Fn) [with Fn = main()::<lambda(int)>; Iterator = __gnu_cxx::__normal_iterator<int*, std::vector<int> >]’:
+../example/main.cpp:17:5:   required from here
+../src/MCGA.h:102:12: error: no matching function for call to ‘MCGA::Stream<__gnu_cxx::__normal_iterator<int*, std::vector<int> > >::Stream(MCGA::Stream<__gnu_cxx::__normal_iterator<int*, std::vector<int> > >::Aplicator<main()::<lambda(int)> >, MCGA::Stream<__gnu_cxx::__normal_iterator<int*, std::vector<int> > >::Aplicator<main()::<lambda(int)> >)’
+     return Stream(it.begin(), it.end());
+            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../src/MCGA.h:71:4: note: candidate: MCGA::Stream<Iterator>::Stream(Iterator, Iterator) [with Iterator = __gnu_cxx::__normal_iterator<int*, std::vector<int> >]
+    Stream(Iterator start, Iterator end) :
+    ^~~~~~
+../src/MCGA.h:71:4: note:   no known conversion for argument 1 from ‘MCGA::Stream<__gnu_cxx::__normal_iterator<int*, std::vector<int> > >::Aplicator<main()::<lambda(int)> >’ to ‘__gnu_cxx::__normal_iterator<int*, std::vector<int> >’
+../src/MCGA.h:11:8: note: candidate: constexpr MCGA::Stream<__gnu_cxx::__normal_iterator<int*, std::vector<int> > >::Stream(const MCGA::Stream<__gnu_cxx::__normal_iterator<int*, std::vector<int> > >&)
+  class Stream
+        ^~~~~~
+../src/MCGA.h:11:8: note:   candidate expects 1 argument, 2 provided
+../src/MCGA.h:11:8: note: candidate: constexpr MCGA::Stream<__gnu_cxx::__normal_iterator<int*, std::vector<int> > >::Stream(MCGA::Stream<__gnu_cxx::__normal_iterator<int*, std::vector<int> > >&&)
+../src/MCGA.h:11:8: note:   candidate expects 1 argument, 2 provided
+../src/MCGA.h: In instantiation of ‘void MCGA::Stream<Iterator>::forEach(T) [with T = main()::<lambda(int&)>; Iterator = MCGA::Stream<__gnu_cxx::__normal_iterator<int*, std::vector<int> > >::Aplicator<main()::<lambda(int)> >]’:
+../example/main.cpp:21:5:   required from here
+../src/MCGA.h:93:9: error: no match for ‘operator*’ (operand type is ‘MCGA::Stream<__gnu_cxx::__normal_iterator<int*, std::vector<int> > >::Aplicator<main()::<lambda(int)> >’)
+      fn(*m_current);
+         ^~~~~~~~~~
+../src/MCGA.h:54:8: note: candidate: template<class T> T& MCGA::Stream<Iterator>::Aplicator<FnType>::operator*() [with T = T; FnType = main()::<lambda(int)>; Iterator = __gnu_cxx::__normal_iterator<int*, std::vector<int> >]
+     T& operator*()
+        ^~~~~~~~
+../src/MCGA.h:54:8: note:   template argument deduction/substitution failed:
+../src/MCGA.h:93:9: note:   couldn't deduce template parameter ‘T’
+      fn(*m_current);
+         ^~~~~~~~~~
+../src/MCGA.h:94:15: error: no ‘operator++(int)’ declared for postfix ‘++’ [-fpermissive]
+      m_current++;
+      ~~~~~~~~~^~
