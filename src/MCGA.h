@@ -2,106 +2,99 @@
 #define MCGA_H
 
 #include <functional>
-#include <iterator>
 
 // Stream(col.cbegin(), col.cend()).map([](auto& foo) {return foo * foo;}).sum();
-namespace MCGA
+namespace mcga
 {
-	template<typename Iterator>
-	class Stream
+    template<typename Iterator>
+    class _range
+    {
+        Iterator m_start;
+        Iterator m_end;
+    public:
+            _range(Iterator start, Iterator end) :
+                                                    m_start(start),
+                                                    m_end(end)
+            {
+            }
+            
+            const typename std::iterator_traits<Iterator>::value_type& next()
+            {
+                return *(m_start++);
+            }
+            
+            bool hasNext()
+            {
+                return m_start != m_end;
+            }
+    };
+    
+	template<typename T, typename Iterator>
+	class _stream
 	{
-		Iterator m_current;
-		Iterator m_end;
-
-		template<typename FnType>
+		template<typename To>
 		class Aplicator
 		{
 			Iterator m_current;
-			Iterator m_end;
-			FnType m_fn;
+			std::function<To(const T&)> m_fn;
 			public:
-				Aplicator(Iterator begin, Iterator end, FnType fn) :
+				Aplicator(Iterator begin,
+                          std::function<To(const T&)> fn) :
 													m_current(begin),
-													m_end(end),
 													m_fn(fn)
 				{
 				}
 
-				Aplicator<FnType> operator++(int)
-				{
-					auto tmp = *this;
-					operator++();
-					return tmp;
-				}
-
-				Aplicator<FnType>& operator++()
-				{
-					m_current++;
-					return *this;
-				}
-
-				bool operator==(const Aplicator& rhs)
-				{
-					return (m_current == rhs.m_current) && (m_end == rhs.m_end);
-				}
-
-				bool operator!=(const Aplicator& rhs)
-				{
-					return !(*this == rhs);
-				}
-				
-				auto operator*()
-				{
-					return m_fn(*m_current);
-				}
-
-				Aplicator<FnType> begin()
-				{
-					return *this;
-				}
-			
-				Aplicator<FnType> end()
-				{
-					return Aplicator<FnType>(m_end, m_end, m_fn);
-				}
+                To next()
+                {
+                    return m_fn(m_current.next());
+                }
+                
+                bool hasNext()
+                {
+                    return m_current.hasNext();
+                }
 		};
-
+        
+        Iterator m_current;
+        
 		public:
-			Stream(Iterator start, Iterator end) :
-								m_current(start),
-								m_end(end)
-			{
-			}
-
 			size_t size()
 			{
 				size_t count = 0;
-				while(m_current != m_end)
+				while(m_current.hasNext())
 				{
-					m_current++;
+					m_current.next();
 					count += 1;
 				}
 				return count;
 			}
 
-			template<typename Fn>
-			void forEach(Fn f)
+			template<typename F>
+			void forEach(F f)
 			{
-
-				while(m_current != m_end)
+				while(m_current.hasNext())
 				{
-					f(*m_current);
-					m_current++;
+					f(m_current.next());
 				}
 			}
 
-			template<typename Fn>
-			Stream<Aplicator<Fn>> map(Fn fn)
+			template<typename Val>
+			_stream<Val, Aplicator<Val>> map(std::function<Val(const T&)> fn)
 			{
-				auto it = Aplicator<Fn>(m_current, m_end, fn);
-				return Stream<Aplicator<Fn>>(it.begin(), it.end());
+				return _stream<Val, Aplicator<Val>>(Aplicator<Val>(m_current, fn));
 			}
+        
+            _stream(Iterator current) : m_current(current)
+            {
+            }
 	};
+
+    template<typename It>
+    _stream<typename std::iterator_traits<It>::value_type, _range<It>> stream(It begin, It end)
+    {
+        return _stream<typename std::iterator_traits<It>::value_type, _range<It>>(_range<It>(begin, end));
+    }
 }
 
 #endif

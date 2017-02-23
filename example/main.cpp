@@ -1,4 +1,4 @@
-#include "MCGA.h"
+#include "../src/MCGA.h"
 #include <iostream>
 #include <vector>
 
@@ -9,19 +9,15 @@ int main()
 	{
 		integers.push_back(i);
 	}
-
-	std::cout << "Pocet integeru je " << MCGA::Stream<std::vector<int>::iterator>(integers.begin(), integers.end()).size() << std::endl;
-	auto mapStream = MCGA::Stream<std::vector<int>::iterator>(integers.begin(), integers.end()).map([](int x)
-			{
-				return x * x;
-			}).map([](int x)
-				{
-					return x / 2;
-				});
-
-	mapStream.forEach([](int x)
-			{
-				std::cout << x << std::endl;
-			});
+	mcga::stream(integers.begin(), integers.end())
+        .map<int>([](const int& x)
+        {
+            return x * x;
+        })
+        .forEach([](const int& x) -> void
+        {
+            std::cout << x << std::endl;
+            return;
+        });
 	return 0;
 }
