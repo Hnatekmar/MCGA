@@ -1,5 +1,7 @@
+Make C++ Great Again
+====================
 What is MCGA?
-=============
+-------------
 MCGA aims to provide Java/C# like stream capabilities into C++. Here is short example of library in action:
 
 
